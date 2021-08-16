@@ -1,4 +1,4 @@
-var CACHE_NAME = '2021-08-13 09:25';
+var CACHE_NAME = '2021-08-16 19:00';
 var urlsToCache = [
   '/talk-phonics/',
   '/talk-phonics/index.js',
