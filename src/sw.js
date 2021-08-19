@@ -1,4 +1,4 @@
-var CACHE_NAME = '2021-08-16 19:00';
+var CACHE_NAME = '2021-08-19 19:50';
 var urlsToCache = [
   '/talk-phonics/',
   '/talk-phonics/index.js',
@@ -7,6 +7,7 @@ var urlsToCache = [
   '/talk-phonics/mp3/correct3.mp3',
   '/talk-phonics/favicon/original.svg',
   'https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css',
+  'https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js',
   'https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css',
 ];
 
