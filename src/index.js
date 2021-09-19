@@ -158,7 +158,7 @@ function initProblems() {
   fetch("data/" + grade + ".csv").then((response) => response.text()).then(
     (tsv) => {
       problems = [];
-      tsv.split("\n").slice(0, -1).forEach((line) => {
+      tsv.trim().split("\n").forEach((line) => {
         const [en, ja] = line.split(",");
         problems.push({ en: en, ja: ja });
       });
