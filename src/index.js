@@ -133,6 +133,11 @@ function getRandomInt(min, max) {
 }
 
 function nextProblem() {
+  const searchButton = document.getElementById("searchButton");
+  searchButton.disabled = true;
+  setTimeout(function () {
+    searchButton.disabled = false;
+  }, 2000);
   if (problemCandidate.length <= 0) {
     problemCandidate = problems.slice();
   }
