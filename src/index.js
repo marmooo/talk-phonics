@@ -1,14 +1,15 @@
-let endAudio, incorrectAudio, correctAudio;
-loadAudios();
-const AudioContext = window.AudioContext || window.webkitAudioContext;
-const audioContext = new AudioContext();
-const voiceInput = setVoiceInput();
 let problems = [];
 let problemCandidate;
 let answer = "Gopher";
 let firstRun = true;
-let englishVoices = [];
 let correctCount = 0;
+let englishVoices = [];
+const voiceInput = setVoiceInput();
+let endAudio, incorrectAudio, correctAudio;
+loadAudios();
+const AudioContext = window.AudioContext || window.webkitAudioContext;
+const audioContext = new AudioContext();
+loadConfig();
 
 function loadConfig() {
   if (localStorage.getItem("darkMode") == 1) {
@@ -19,7 +20,6 @@ function loadConfig() {
     document.getElementById("voiceOff").classList.remove("d-none");
   }
 }
-loadConfig();
 
 function toggleDarkMode() {
   if (localStorage.getItem("darkMode") == 1) {
