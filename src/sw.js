@@ -1,11 +1,11 @@
-var CACHE_NAME = '2022-04-13 08:15';
+var CACHE_NAME = '2022-04-28 00:05';
 var urlsToCache = [
   "/talk-phonics/",
   "/talk-phonics/index.js",
   "/talk-phonics/mp3/end.mp3",
   "/talk-phonics/mp3/incorrect1.mp3",
   "/talk-phonics/mp3/correct3.mp3",
-  "/talk-phonics/favicon/original.svg",
+  "/talk-phonics/favicon/favicon.svg",
   "https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css",
   "https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js",
   "https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css",
