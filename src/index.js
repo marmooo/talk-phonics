@@ -1,3 +1,9 @@
+const playPanel = document.getElementById("playPanel");
+const countPanel = document.getElementById("countPanel");
+const scorePanel = document.getElementById("scorePanel");
+const replyPlease = document.getElementById("replyPlease");
+const reply = document.getElementById("reply");
+const gameTime = 180;
 let problems = [];
 let problemCandidate;
 let answer = "Gopher";
@@ -93,13 +99,13 @@ function loadAudios() {
 
 function loadVoices() {
   // https://stackoverflow.com/questions/21513706/
-  const allVoicesObtained = new Promise(function (resolve) {
+  const allVoicesObtained = new Promise((resolve) => {
     let voices = speechSynthesis.getVoices();
     if (voices.length !== 0) {
       resolve(voices);
     } else {
       let supported = false;
-      speechSynthesis.addEventListener("voiceschanged", function () {
+      speechSynthesis.addEventListener("voiceschanged", () => {
         supported = true;
         voices = speechSynthesis.getVoices();
         resolve(voices);
@@ -142,7 +148,7 @@ function getRandomInt(min, max) {
 function nextProblem() {
   const searchButton = document.getElementById("searchButton");
   searchButton.disabled = true;
-  setTimeout(function () {
+  setTimeout(() => {
     searchButton.disabled = false;
   }, 2000);
   if (problemCandidate.length <= 0) {
@@ -153,8 +159,8 @@ function nextProblem() {
   const input = document.getElementById("cse-search-input-box-id");
   input.value = problem.ja;
   answer = problem.en;
-  const problemObj = document.getElementById("problem");
-  problemObj.textContent = problem.ja + " (" + problem.en + ")";
+  document.getElementById("problemJa").textContent = problem.ja;
+  document.getElementById("problemEn").textContent = `(${problem.en})`;
   if (localStorage.getItem("voice") != 0) {
     speak(answer);
   }
@@ -193,7 +199,8 @@ function searchByGoogle(event) {
     }
     firstRun = false;
   }
-  document.getElementById("reply").textContent = "英語で答えてください";
+  replyPlease.classList.remove("d-none");
+  reply.classList.add("d-none");
   return false;
 }
 document.getElementById("cse-search-box-form-id").onsubmit = searchByGoogle;
@@ -209,7 +216,7 @@ function setVoiceInput() {
 
     voiceInput.onstart = () => {
       document.getElementById("startVoiceInput").classList.add("d-none");
-      document.getElementById("stop-voice-input").classList.remove("d-none");
+      document.getElementById("stopVoiceInput").classList.remove("d-none");
     };
     voiceInput.onend = () => {
       if (!speechSynthesis.speaking) {
@@ -217,15 +224,13 @@ function setVoiceInput() {
       }
     };
     voiceInput.onresult = (event) => {
-      const reply = event.results[0][0].transcript;
-      const replyObj = document.getElementById("reply");
-      if (reply.toLowerCase().split(" ").includes(answer.toLowerCase())) {
+      const replyText = event.results[0][0].transcript;
+      if (replyText.toLowerCase().split(" ").includes(answer.toLowerCase())) {
         correctCount += 1;
         playAudio(correctAudio);
-        if (correctCount < 5) {
-          replyObj.textContent = "◯ " + answer;
+        if (correctCount < 15) {
+          reply.textContent = "⭕ " + answer;
           document.getElementById("searchButton").classList.add(
-            "animate__animated",
             "animate__heartBeat",
           );
         } else {
@@ -237,8 +242,10 @@ function setVoiceInput() {
         }
       } else {
         playAudio(incorrectAudio);
-        replyObj.textContent = "× " + reply;
+        reply.textContent = "❌ " + replyText;
       }
+      replyPlease.classList.add("d-none");
+      reply.classList.remove("d-none");
       voiceInput.stop();
     };
     return voiceInput;
@@ -252,7 +259,8 @@ function startVoiceInput() {
 function stopVoiceInput() {
   document.getElementById("startVoiceInput").classList.remove("d-none");
   document.getElementById("stopVoiceInput").classList.add("d-none");
-  document.getElementById("reply").textContent = "英語で答えてください";
+  replyPlease.classList.remove("d-none");
+  reply.classList.add("d-none");
   voiceInput.stop();
 }
 
@@ -260,12 +268,11 @@ let gameTimer;
 function startGameTimer() {
   clearInterval(gameTimer);
   const timeNode = document.getElementById("time");
-  timeNode.textContent = "180秒 / 180秒";
-  gameTimer = setInterval(function () {
-    const arr = timeNode.textContent.split("秒 /");
-    const t = parseInt(arr[0]);
+  initTime();
+  gameTimer = setInterval(() => {
+    const t = parseInt(timeNode.textContent);
     if (t > 0) {
-      timeNode.textContent = (t - 1) + "秒 /" + arr[1];
+      timeNode.textContent = t - 1;
     } else {
       clearInterval(gameTimer);
       playAudio(endAudio);
@@ -279,12 +286,14 @@ function startGameTimer() {
 let countdownTimer;
 function countdown() {
   clearTimeout(countdownTimer);
-  gameStart.classList.remove("d-none");
+  countPanel.classList.remove("d-none");
   playPanel.classList.add("d-none");
   scorePanel.classList.add("d-none");
+  replyPlease.classList.remove("d-none");
+  reply.classList.add("d-none");
   const counter = document.getElementById("counter");
   counter.textContent = 3;
-  countdownTimer = setInterval(function () {
+  countdownTimer = setInterval(() => {
     const colors = ["skyblue", "greenyellow", "violet", "tomato"];
     if (parseInt(counter.textContent) > 1) {
       const t = parseInt(counter.textContent) - 1;
@@ -292,17 +301,20 @@ function countdown() {
       counter.textContent = t;
     } else {
       clearTimeout(countdownTimer);
-      gameStart.classList.add("d-none");
+      countPanel.classList.add("d-none");
       playPanel.classList.remove("d-none");
       correctCount = 0;
       document.getElementById("score").textContent = 0;
       document.getElementById("searchButton").classList.add(
-        "animate__animated",
         "animate__heartBeat",
       );
       startGameTimer();
     }
   }, 1000);
+}
+
+function initTime() {
+  document.getElementById("time").textContent = gameTime;
 }
 
 document.getElementById("toggleDarkMode").onclick = toggleDarkMode;
@@ -314,8 +326,8 @@ document.getElementById("stopVoiceInput").onclick = stopVoiceInput;
 document.getElementById("respeak").onclick = respeak;
 document.getElementById("searchButton").addEventListener(
   "animationend",
-  function () {
-    this.classList.remove("animate__heartBeat");
+  (e) => {
+    e.target.classList.remove("animate__heartBeat");
   },
 );
 document.getElementById("gradeOption").onchange = initProblems;
