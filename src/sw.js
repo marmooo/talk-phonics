@@ -1,4 +1,4 @@
-var CACHE_NAME = '2022-06-13 10:35';
+var CACHE_NAME = "2022-06-13 10:45";
 var urlsToCache = [
   "/talk-phonics/",
   "/talk-phonics/index.js",
@@ -7,6 +7,7 @@ var urlsToCache = [
   "/talk-phonics/mp3/incorrect1.mp3",
   "/talk-phonics/mp3/correct3.mp3",
   "/talk-phonics/favicon/favicon.svg",
+  "https://marmooo.github.io/yomico/yomico.min.js",
   "https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css",
   "https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js",
   "https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css",
