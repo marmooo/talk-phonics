@@ -21,10 +21,6 @@ function loadConfig() {
   if (localStorage.getItem("darkMode") == 1) {
     document.documentElement.dataset.theme = "dark";
   }
-  if (localStorage.getItem("voice") == 0) {
-    document.getElementById("voiceOn").classList.add("d-none");
-    document.getElementById("voiceOff").classList.remove("d-none");
-  }
   if (localStorage.getItem("furigana") == 1) {
     const obj = document.getElementById("addFurigana");
     addFurigana(obj);
@@ -53,20 +49,6 @@ function addFurigana() {
     });
     localStorage.setItem("furigana", 1);
     obj.setAttribute("data-done", true);
-  }
-}
-
-function toggleVoice() {
-  if (localStorage.getItem("voice") != 0) {
-    localStorage.setItem("voice", 0);
-    document.getElementById("voiceOn").classList.add("d-none");
-    document.getElementById("voiceOff").classList.remove("d-none");
-    speechSynthesis.cancel();
-  } else {
-    localStorage.setItem("voice", 1);
-    document.getElementById("voiceOn").classList.remove("d-none");
-    document.getElementById("voiceOff").classList.add("d-none");
-    speak(answer);
   }
 }
 
@@ -338,7 +320,6 @@ function initTime() {
 
 document.getElementById("toggleDarkMode").onclick = toggleDarkMode;
 document.getElementById("addFurigana").onclick = addFurigana;
-document.getElementById("toggleVoice").onclick = toggleVoice;
 document.getElementById("restartButton").onclick = countdown;
 document.getElementById("startButton").onclick = countdown;
 document.getElementById("startVoiceInput").onclick = startVoiceInput;
