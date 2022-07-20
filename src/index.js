@@ -162,9 +162,7 @@ function nextProblem() {
   answer = problem.en;
   document.getElementById("problemJa").textContent = problem.ja;
   document.getElementById("problemEn").textContent = `(${problem.en})`;
-  if (localStorage.getItem("voice") != 0) {
-    speak(answer);
-  }
+  speak(answer);
 }
 
 function initProblems() {
