@@ -245,9 +245,8 @@ function setVoiceInput() {
         playAudio("correct");
         if (correctCount < 15) {
           reply.textContent = "⭕ " + answer;
-          document.getElementById("searchButton").classList.add(
-            "animate__heartBeat",
-          );
+          document.getElementById("searchButton")
+            .classList.add("animate__heartBeat");
         } else {
           clearInterval(gameTimer);
           playAudio("end");
@@ -343,12 +342,10 @@ document.getElementById("startButton").onclick = countdown;
 document.getElementById("startVoiceInput").onclick = startVoiceInput;
 document.getElementById("stopVoiceInput").onclick = stopVoiceInput;
 document.getElementById("respeak").onclick = respeak;
-document.getElementById("searchButton").addEventListener(
-  "animationend",
-  (e) => {
+document.getElementById("searchButton")
+  .addEventListener("animationend", (e) => {
     e.target.classList.remove("animate__heartBeat");
-  },
-);
+  });
 document.getElementById("gradeOption").onchange = initProblems;
 document.addEventListener("click", unlockAudio, {
   once: true,
