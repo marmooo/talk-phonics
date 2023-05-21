@@ -1,21 +1,23 @@
+const infoPanel = document.getElementById("infoPanel");
 const playPanel = document.getElementById("playPanel");
 const countPanel = document.getElementById("countPanel");
 const scorePanel = document.getElementById("scorePanel");
 const replyPlease = document.getElementById("replyPlease");
 const reply = document.getElementById("reply");
 const gameTime = 180;
+let gameTimer;
 let problems = [];
 let problemCandidate;
-let answer = "Gopher";
-let firstRun = true;
+let answer = "dog";
 let correctCount = 0;
-let englishVoices = [];
 const voiceInput = setVoiceInput();
 const audioContext = new AudioContext();
 const audioBufferCache = {};
 loadAudio("end", "mp3/end.mp3");
 loadAudio("correct", "mp3/correct3.mp3");
 loadAudio("incorrect", "mp3/incorrect1.mp3");
+let englishVoices = [];
+loadVoices();
 loadConfig();
 
 function loadConfig() {
@@ -138,7 +140,6 @@ function loadVoices() {
       .filter((voice) => !jokeVoices.includes(voice.voiceURI));
   });
 }
-loadVoices();
 
 function speak(text) {
   speechSynthesis.cancel();
@@ -163,21 +164,15 @@ function getRandomInt(min, max) {
 }
 
 function nextProblem() {
-  const searchButton = document.getElementById("searchButton");
-  searchButton.disabled = true;
-  setTimeout(() => {
-    searchButton.disabled = false;
-  }, 2000);
   if (problemCandidate.length <= 0) {
     problemCandidate = problems.slice();
   }
   const problem =
     problemCandidate.splice(getRandomInt(0, problemCandidate.length), 1)[0];
-  const input = document.getElementById("cse-search-input-box-id");
-  input.value = problem.ja;
   answer = problem.en;
   document.getElementById("problemJa").textContent = problem.ja;
   document.getElementById("problemEn").textContent = `(${problem.en})`;
+  document.getElementById("emoji").textContent = problem.emoji;
   speak(answer);
 }
 
@@ -188,37 +183,12 @@ function initProblems() {
     .then((tsv) => {
       problems = [];
       tsv.trim().split("\n").forEach((line) => {
-        const [en, ja] = line.split(",");
-        problems.push({ en: en, ja: ja });
+        const [en, ja, emoji] = line.split(",");
+        problems.push({ en: en, ja: ja, emoji: emoji });
       });
       problemCandidate = problems.slice();
     });
 }
-initProblems();
-
-function searchByGoogle(event) {
-  event.preventDefault();
-  const input = document.getElementById("cse-search-input-box-id");
-  const element = google.search.cse.element.getElement("searchresults-only0");
-  nextProblem();
-  if (input.value == "") {
-    element.clearAllResults();
-  } else {
-    voiceInput.stop();
-    element.execute(input.value);
-  }
-  if (firstRun) {
-    const gophers = document.getElementById("gophers");
-    while (gophers.firstChild) {
-      gophers.removeChild(gophers.lastChild);
-    }
-    firstRun = false;
-  }
-  replyPlease.classList.remove("d-none");
-  reply.classList.add("d-none");
-  return false;
-}
-document.getElementById("cse-search-box-form-id").onsubmit = searchByGoogle;
 
 function setVoiceInput() {
   if (!("webkitSpeechRecognition" in window)) {
@@ -245,8 +215,6 @@ function setVoiceInput() {
         playAudio("correct");
         if (correctCount < 15) {
           reply.textContent = "⭕ " + answer;
-          document.getElementById("searchButton")
-            .classList.add("animate__heartBeat");
         } else {
           clearInterval(gameTimer);
           playAudio("end");
@@ -282,11 +250,42 @@ function stopVoiceInput() {
   voiceInput.stop();
 }
 
-let gameTimer;
+function countdown() {
+  countPanel.classList.remove("d-none");
+  infoPanel.classList.add("d-none");
+  playPanel.classList.add("d-none");
+  scorePanel.classList.add("d-none");
+  replyPlease.classList.remove("d-none");
+  reply.classList.add("d-none");
+  const counter = document.getElementById("counter");
+  counter.textContent = 3;
+  const timer = setInterval(() => {
+    const colors = ["skyblue", "greenyellow", "violet", "tomato"];
+    if (parseInt(counter.textContent) > 1) {
+      const t = parseInt(counter.textContent) - 1;
+      counter.style.backgroundColor = colors[t];
+      counter.textContent = t;
+    } else {
+      clearTimeout(timer);
+      countPanel.classList.add("d-none");
+      infoPanel.classList.remove("d-none");
+      playPanel.classList.remove("d-none");
+      correctCount = 0;
+      startGameTimer();
+      nextProblem();
+    }
+  }, 1000);
+}
+
+function startGame() {
+  clearInterval(gameTimer);
+  initTime();
+  countdown();
+}
+
 function startGameTimer() {
   clearInterval(gameTimer);
   const timeNode = document.getElementById("time");
-  initTime();
   gameTimer = setInterval(() => {
     const t = parseInt(timeNode.textContent);
     if (t > 0) {
@@ -296,37 +295,7 @@ function startGameTimer() {
       playAudio("end");
       playPanel.classList.add("d-none");
       scorePanel.classList.remove("d-none");
-      document.getElementById("score").textContent = correctCount;
-    }
-  }, 1000);
-}
-
-let countdownTimer;
-function countdown() {
-  clearTimeout(countdownTimer);
-  countPanel.classList.remove("d-none");
-  playPanel.classList.add("d-none");
-  scorePanel.classList.add("d-none");
-  replyPlease.classList.remove("d-none");
-  reply.classList.add("d-none");
-  const counter = document.getElementById("counter");
-  counter.textContent = 3;
-  countdownTimer = setInterval(() => {
-    const colors = ["skyblue", "greenyellow", "violet", "tomato"];
-    if (parseInt(counter.textContent) > 1) {
-      const t = parseInt(counter.textContent) - 1;
-      counter.style.backgroundColor = colors[t];
-      counter.textContent = t;
-    } else {
-      clearTimeout(countdownTimer);
-      countPanel.classList.add("d-none");
-      playPanel.classList.remove("d-none");
-      correctCount = 0;
-      document.getElementById("score").textContent = 0;
-      document.getElementById("searchButton").classList.add(
-        "animate__heartBeat",
-      );
-      startGameTimer();
+      scoring();
     }
   }, 1000);
 }
@@ -335,17 +304,19 @@ function initTime() {
   document.getElementById("time").textContent = gameTime;
 }
 
+function scoring() {
+  document.getElementById("score").textContent = correctCount;
+}
+
+initProblems();
+
 document.getElementById("toggleDarkMode").onclick = toggleDarkMode;
 document.getElementById("addFurigana").onclick = addFurigana;
-document.getElementById("restartButton").onclick = countdown;
-document.getElementById("startButton").onclick = countdown;
+document.getElementById("restartButton").onclick = startGame;
+document.getElementById("startButton").onclick = startGame;
 document.getElementById("startVoiceInput").onclick = startVoiceInput;
 document.getElementById("stopVoiceInput").onclick = stopVoiceInput;
 document.getElementById("respeak").onclick = respeak;
-document.getElementById("searchButton")
-  .addEventListener("animationend", (e) => {
-    e.target.classList.remove("animate__heartBeat");
-  });
 document.getElementById("gradeOption").onchange = initProblems;
 document.addEventListener("click", unlockAudio, {
   once: true,

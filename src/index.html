@@ -27,23 +27,19 @@
         });
       }
     </script>
-    <script async src="https://cse.google.com/cse.js?cx=partner-pub-6459713332128733:7164795498"></script>
     <link rel="icon" type="image/png" href="/talk-phonics/favicon/favicon.png">
     <link rel="icon" type="image/svg+xml" href="/talk-phonics/favicon/favicon.svg">
     <link rel="apple-touch-icon" sizes="180x180" href="/talk-phonics/favicon/apple-touch-icon.png">
     <link rel="manifest" href="/talk-phonics/favicon/site.webmanifest">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
     <style>
+      .emoji { font-size:5rem; }
       #counter {
         font-size:10rem; width:12rem; height:12rem; line-height:12rem; border-radius: 50%;
         background:tomato; margin:auto; }
-      .card-header.ruby { padding: 1rem 1.25rem .5rem 1.25rem }
       html[data-theme="dark"] { filter: invert(1) hue-rotate(180deg); }
       @-moz-document url-prefix() { html[data-theme="dark"] { background-color:black; } }
-      html[data-theme="dark"] #gophers { filter: invert(1) hue-rotate(180deg); }
-      html[data-theme="dark"] #___gcse_0 img { filter: invert(1) hue-rotate(180deg); }
     </style>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" media="print" onload="this.media='all'">
   </head>
   <body>
     <header>
@@ -77,12 +73,10 @@ sudo apt install festival speech-dispatcher-festival</code></pre>
       <div id="noSTT" class="alert alert-warning d-none">
         お使いのブラウザは音声認識に対応していません。Chrome をご利用ください。
       </div>
-      <div id="playPanel">
+      <div id="infoPanel">
         <div class="row">
           <div class="col-md">
-            <p>フォニックスの発音ゲームです。
-            15こ発音できればクリア！
-            「これなあに？」を押すとランダムに問題を出します。
+            <p>フォニックスの発音ゲームです。15こ発音できればクリア！
             </p>
             <p>採点がきびしい単語は文章で答えてみてください。
             こたえの単語が含まれていれば正解になります。
@@ -254,58 +248,41 @@ sudo apt install festival speech-dispatcher-festival</code></pre>
             <span class="ms-1">(す ず)</span>
           </label>
         </form>
-        <div class="text-center">
-          <form id="cse-search-box-form-id" class="pb-1">
-            <input type="hidden" value="学校" id="cse-search-input-box-id">
-            <input id="searchButton" type="submit" value="これなあに？" class="btn btn-primary btn-lg mx-1">
-          </form>
+      </div>
+      <div id="playPanel" class="text-center">
+        <div>
+          <span id="emoji" class="emoji">🐶</span>
         </div>
-        <div class="text-center">
-          <div class="pt-4 h5">問題:
-            <span id="problemJa" class="ms-1">ゴファー</span>
-            <span id="problemEn" class="ms-1 notranslate">(Gopher)</span>
-            <button id="respeak" title="もう一度聴く" class="btn btn-outline-secondary btn-lg ms-1" type="button">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/></svg>
-            </button>
-          </div>
-          <div id="recognitionPanel" class="text-center pt-1">
-            <span id="replyPlease" class="me-2 h5">英語で答えてください</span>
-            <span id="reply" class="me-2 h5 notranslate"></span>
-            <button id="startVoiceInput" title="音声入力を開始する" class="btn btn-outline-secondary rounded-pill" type="button">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="black" width="64" height="64"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 14c1.66 0 2.99-1.34 2.99-3L15 5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z"/></svg>
-            </button>
-            <button id="stopVoiceInput" title="音声入力を終了する" class="btn btn-outline-secondary rounded-pill d-none" type="button">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="64" height="64"><path d="M0 0h24v24H0zm0 0h24v24H0z" fill="none"/><path d="M19 11h-1.7c0 .74-.16 1.43-.43 2.05l1.23 1.23c.56-.98.9-2.09.9-3.28zm-4.02.17c0-.06.02-.11.02-.17V5c0-1.66-1.34-3-3-3S9 3.34 9 5v.18l5.98 5.99zM4.27 3L3 4.27l6.01 6.01V11c0 1.66 1.33 3 2.99 3 .22 0 .44-.03.65-.08l1.66 1.66c-.71.33-1.5.52-2.31.52-2.76 0-5.3-2.1-5.3-5.1H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c.91-.13 1.77-.45 2.54-.9L19.73 21 21 19.73 4.27 3z"/></svg>
-            </button>
-          </div>
+        <div class="h5">
+          <button id="respeak" title="もう一度聴く" class="btn p-0" type="button">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 16 16">
+              <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/>
+              <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/>
+            </svg>
+          </button>
+          <span id="problemJa" class="ms-1">いぬ</span>
+          <span id="problemEn" class="ms-1 notranslate">(dog)</span>
         </div>
-        <div id="gophers" class="text-center pt-4">
-          <img alt="" src="img/animated-gopher.svg" width="128" height="128">
-          <img alt="" src="img/witch-cooking.png" width="119" height="128">
-          <img alt="" src="img/dancing-gopher.gif" width="128" height="128">
-          <img alt="" src="img/hiking.png" width="158" height="128">
-          <img alt="" src="img/surfing-js.png" width="176" height="128">
-          <img alt="" src="img/witch-learning.png" width="170" height="128">
-          <img alt="" src="img/umbrella.png" width="186" height="128">
-          <img alt="" src="img/messenger-red-letter.png" width="121" height="128">
-          <img alt="" src="img/robin-hood.png" width="95" height="128">
-          <img alt="" src="img/gamer.png" width="122" height="128">
+        <div id="recognitionPanel" class="text-center pt-1">
+          <span id="replyPlease" class="me-2 h5">英語で答えてください</span>
+          <span id="reply" class="me-2 h5 notranslate"></span>
+          <button id="startVoiceInput" title="音声入力を開始する" class="btn btn-outline-secondary rounded-pill" type="button">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="black" width="64" height="64"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 14c1.66 0 2.99-1.34 2.99-3L15 5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z"/></svg>
+          </button>
+          <button id="stopVoiceInput" title="音声入力を終了する" class="btn btn-outline-secondary rounded-pill d-none" type="button">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="64" height="64"><path d="M0 0h24v24H0zm0 0h24v24H0z" fill="none"/><path d="M19 11h-1.7c0 .74-.16 1.43-.43 2.05l1.23 1.23c.56-.98.9-2.09.9-3.28zm-4.02.17c0-.06.02-.11.02-.17V5c0-1.66-1.34-3-3-3S9 3.34 9 5v.18l5.98 5.99zM4.27 3L3 4.27l6.01 6.01V11c0 1.66 1.33 3 2.99 3 .22 0 .44-.03.65-.08l1.66 1.66c-.71.33-1.5.52-2.31.52-2.76 0-5.3-2.1-5.3-5.1H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c.91-.13 1.77-.45 2.54-.9L19.73 21 21 19.73 4.27 3z"/></svg>
+          </button>
         </div>
-        <div class="gcse-searchresults-only"
-             data-defaultToImageSearch="true"
-             data-disableWebSearch="true"
-             data-resultSetSize="small"
-             data-image_size="small"></div>
       </div>
       <div id="countPanel" class="text-center d-none notranslate">
         <div id="countdown">
           <div id="counter">3</div>
-          <img alt="" src="img/witch-cooking.png" width="119" height="128">
+          <span class="emoji">🐩</span>
         </div>
       </div>
       <div id="scorePanel" class="text-center pb-3 d-none">
         <h3 class="pt-3">スコア</h3>
-        <img alt="" src="img/witch-cooking.png" width="119" height="128">
+        <span class="emoji notranslate">🐬</span>
         <p>クリアしたのは・・・</p>
         <div class="h2 pb-3">
           <span id="score" class="h1">0</span>
