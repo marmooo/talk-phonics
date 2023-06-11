@@ -215,6 +215,7 @@ function setVoiceInput() {
         playAudio("correct");
         if (correctCount < 15) {
           reply.textContent = "⭕ " + answer;
+          setTimeout(nextProblem, 500);
         } else {
           clearInterval(gameTimer);
           playAudio("end");
@@ -251,6 +252,7 @@ function stopVoiceInput() {
 }
 
 function countdown() {
+  correctCount = 0;
   countPanel.classList.remove("d-none");
   infoPanel.classList.add("d-none");
   playPanel.classList.add("d-none");
@@ -270,7 +272,6 @@ function countdown() {
       countPanel.classList.add("d-none");
       infoPanel.classList.remove("d-none");
       playPanel.classList.remove("d-none");
-      correctCount = 0;
       startGameTimer();
       nextProblem();
     }
