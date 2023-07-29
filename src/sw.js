@@ -1,4 +1,4 @@
-var CACHE_NAME = "2023-07-15 10:35";
+var CACHE_NAME = "2023-07-29 10:17";
 var urlsToCache = [
   "/talk-phonics/",
   "/talk-phonics/index.js",
@@ -8,7 +8,7 @@ var urlsToCache = [
   "/talk-phonics/mp3/correct3.mp3",
   "/talk-phonics/favicon/favicon.svg",
   "https://marmooo.github.io/yomico/yomico.min.js",
-  "https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js",
+  "https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js",
 ];
 
 self.addEventListener("install", function (event) {
