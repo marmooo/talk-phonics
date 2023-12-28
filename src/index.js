@@ -212,7 +212,7 @@ function setVoiceInput() {
       const replyText = event.results[0][0].transcript;
       if (replyText.toLowerCase().split(" ").includes(answer.toLowerCase())) {
         correctCount += 1;
-        playAudio("correct");
+        playAudio("correct", 0.3);
         if (correctCount < 15) {
           reply.textContent = "⭕ " + answer;
           setTimeout(nextProblem, 500);
@@ -224,7 +224,7 @@ function setVoiceInput() {
           document.getElementById("score").textContent = correctCount;
         }
       } else {
-        playAudio("incorrect");
+        playAudio("incorrect", 0.3);
         reply.textContent = "❌ " + replyText;
       }
       replyPlease.classList.add("d-none");
