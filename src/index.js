@@ -11,7 +11,7 @@ let problemCandidate;
 let answer = "dog";
 let correctCount = 0;
 const voiceInput = setVoiceInput();
-const audioContext = new AudioContext();
+const audioContext = new globalThis.AudioContext();
 const audioBufferCache = {};
 loadAudio("end", "mp3/end.mp3");
 loadAudio("correct", "mp3/correct3.mp3");
@@ -143,7 +143,7 @@ function loadVoices() {
 
 function speak(text) {
   speechSynthesis.cancel();
-  const msg = new SpeechSynthesisUtterance(text);
+  const msg = new globalThis.SpeechSynthesisUtterance(text);
   msg.onend = () => {
     voiceInput.start();
   };
@@ -191,10 +191,10 @@ function initProblems() {
 }
 
 function setVoiceInput() {
-  if (!("webkitSpeechRecognition" in window)) {
+  if (!globalThis.webkitSpeechRecognition) {
     document.getElementById("noSTT").classList.remove("d-none");
   } else {
-    const voiceInput = new webkitSpeechRecognition();
+    const voiceInput = new globalThis.webkitSpeechRecognition();
     voiceInput.lang = "en-US";
     // voiceInput.interimResults = true;
     voiceInput.continuous = true;
