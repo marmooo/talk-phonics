@@ -1,4 +1,4 @@
-const CACHE_NAME = "2024-03-11 09:50";
+const CACHE_NAME = "2024-03-25 10:30";
 const urlsToCache = [
   "/talk-phonics/",
   "/talk-phonics/index.js",
@@ -8,7 +8,6 @@ const urlsToCache = [
   "/talk-phonics/mp3/correct3.mp3",
   "/talk-phonics/favicon/favicon.svg",
   "https://marmooo.github.io/yomico/yomico.min.js",
-  "https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js",
 ];
 
 self.addEventListener("install", (event) => {

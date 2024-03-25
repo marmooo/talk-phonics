@@ -1,3 +1,5 @@
+import { Collapse } from "https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/+esm";
+
 const infoPanel = document.getElementById("infoPanel");
 const playPanel = document.getElementById("playPanel");
 const countPanel = document.getElementById("countPanel");
@@ -177,8 +179,8 @@ function nextProblem() {
 }
 
 function initProblems() {
-  const grade = document.getElementById("gradeOption").radio.value;
-  fetch("data/" + grade + ".csv")
+  const course = document.getElementById("courseOption").radio.value;
+  fetch("data/" + course + ".csv")
     .then((response) => response.text())
     .then((tsv) => {
       problems = [];
@@ -311,6 +313,7 @@ function scoring() {
 
 initProblems();
 
+new Collapse(document.getElementById("courseOption"), { toggle: false });
 document.getElementById("toggleDarkMode").onclick = toggleDarkMode;
 document.getElementById("addFurigana").onclick = addFurigana;
 document.getElementById("restartButton").onclick = startGame;
@@ -318,7 +321,7 @@ document.getElementById("startButton").onclick = startGame;
 document.getElementById("startVoiceInput").onclick = startVoiceInput;
 document.getElementById("stopVoiceInput").onclick = stopVoiceInput;
 document.getElementById("respeak").onclick = respeak;
-document.getElementById("gradeOption").onchange = initProblems;
+document.getElementById("courseOption").onchange = initProblems;
 document.addEventListener("click", unlockAudio, {
   once: true,
   useCapture: true,
