@@ -1,4 +1,4 @@
-import { Collapse } from "https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/+esm";
+import { Collapse } from "https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/+esm";
 
 const infoPanel = document.getElementById("infoPanel");
 const playPanel = document.getElementById("playPanel");
