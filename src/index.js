@@ -13,6 +13,7 @@ let problemCandidate;
 let answer = "dog";
 let correctCount = 0;
 let audioContext;
+let voiceStopped = false;
 const audioBufferCache = {};
 let englishVoices = [];
 const voiceInput = setVoiceInput();
@@ -201,6 +202,7 @@ function nextProblem() {
   document.getElementById("problemEn").textContent = `(${problem.en})`;
   document.getElementById("emoji").textContent = problem.emoji;
   speak(answer);
+  startVoiceInput();
 }
 
 function initProblems() {
@@ -226,14 +228,9 @@ function setVoiceInput() {
     // voiceInput.interimResults = true;
     voiceInput.continuous = true;
 
-    voiceInput.onstart = () => {
-      document.getElementById("startVoiceInput").classList.add("d-none");
-      document.getElementById("stopVoiceInput").classList.remove("d-none");
-    };
     voiceInput.onend = () => {
-      if (!speechSynthesis.speaking) {
-        voiceInput.start();
-      }
+      if (voiceStopped) return;
+      voiceInput.start();
     };
     voiceInput.onresult = (event) => {
       const replyText = event.results[0][0].transcript;
@@ -242,7 +239,9 @@ function setVoiceInput() {
         playAudio("correct", 0.3);
         if (correctCount < 15) {
           reply.textContent = "⭕ " + answer;
-          setTimeout(nextProblem, 500);
+          replyPlease.classList.remove("d-none");
+          reply.classList.add("d-none");
+          nextProblem();
         } else {
           clearInterval(gameTimer);
           playAudio("end");
@@ -253,9 +252,9 @@ function setVoiceInput() {
       } else {
         playAudio("incorrect", 0.3);
         reply.textContent = "❌ " + replyText;
+        replyPlease.classList.add("d-none");
+        reply.classList.remove("d-none");
       }
-      replyPlease.classList.add("d-none");
-      reply.classList.remove("d-none");
       voiceInput.stop();
     };
     return voiceInput;
@@ -263,6 +262,11 @@ function setVoiceInput() {
 }
 
 function startVoiceInput() {
+  voiceStopped = false;
+  document.getElementById("startVoiceInput").classList.add("d-none");
+  document.getElementById("stopVoiceInput").classList.remove("d-none");
+  replyPlease.classList.remove("d-none");
+  reply.classList.add("d-none");
   try {
     voiceInput.start();
   } catch {
@@ -271,11 +275,12 @@ function startVoiceInput() {
 }
 
 function stopVoiceInput() {
+  voiceStopped = true;
   document.getElementById("startVoiceInput").classList.remove("d-none");
   document.getElementById("stopVoiceInput").classList.add("d-none");
   replyPlease.classList.remove("d-none");
   reply.classList.add("d-none");
-  voiceInput.stop();
+  voiceInput.abort();
 }
 
 function countdown() {
@@ -284,8 +289,6 @@ function countdown() {
   infoPanel.classList.add("d-none");
   playPanel.classList.add("d-none");
   scorePanel.classList.add("d-none");
-  replyPlease.classList.remove("d-none");
-  reply.classList.add("d-none");
   const counter = document.getElementById("counter");
   counter.textContent = 3;
   const timer = setInterval(() => {
@@ -321,9 +324,8 @@ function startGameTimer() {
     } else {
       clearInterval(gameTimer);
       playAudio("end");
-      playPanel.classList.add("d-none");
-      scorePanel.classList.remove("d-none");
       scoring();
+      stopVoiceInput();
     }
   }, 1000);
 }
@@ -333,6 +335,8 @@ function initTime() {
 }
 
 function scoring() {
+  playPanel.classList.add("d-none");
+  scorePanel.classList.remove("d-none");
   document.getElementById("score").textContent = correctCount;
 }
 
