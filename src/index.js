@@ -65,10 +65,6 @@ function createAudioContext() {
 }
 
 function unlockAudio() {
-  const uttr = new SpeechSynthesisUtterance("");
-  uttr.lang = "en-US";
-  speechSynthesis.speak(uttr);
-
   if (audioContext) {
     audioContext.resume();
   } else {
@@ -284,6 +280,7 @@ function stopVoiceInput() {
 }
 
 function countdown() {
+  speak(""); // unlock
   correctCount = 0;
   countPanel.classList.remove("d-none");
   infoPanel.classList.add("d-none");
