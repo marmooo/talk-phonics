@@ -168,9 +168,6 @@ function loadVoices() {
 function speak(text) {
   speechSynthesis.cancel();
   const msg = new globalThis.SpeechSynthesisUtterance(text);
-  msg.onend = () => {
-    voiceInput.start();
-  };
   msg.voice = englishVoices[Math.floor(Math.random() * englishVoices.length)];
   msg.lang = "en-US";
   voiceInput.stop();
