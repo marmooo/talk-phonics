@@ -14,7 +14,9 @@ let gameTimer;
 let problems = [];
 let problemCandidate;
 let answer = "dog";
+let consecutiveWins = 0;
 let correctCount = 0;
+let totalCount = 0;
 let audioContext;
 let voiceStopped = false;
 const audioBufferCache = {};
@@ -211,8 +213,14 @@ function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min) + min);
 }
 
+function skipProblem() {
+  consecutiveWins = 0;
+  totalCount += 1;
+  nextProblem();
+}
+
 function nextProblem() {
-  for (let i = 0; i < Math.min(correctCount, maxParticleCount); i++) {
+  for (let i = 0; i < Math.min(consecutiveWins, maxParticleCount); i++) {
     emojiParticle.worker.postMessage({
       type: "spawn",
       options: {
@@ -264,6 +272,7 @@ function setVoiceInput() {
       const replyText = event.results[0][0].transcript;
       if (replyText.toLowerCase().split(" ").includes(answer.toLowerCase())) {
         correctCount += 1;
+        consecutiveWins += 1;
         playAudio("correct", 0.3);
         if (correctCount < 15) {
           reply.textContent = "⭕ " + answer;
@@ -278,6 +287,7 @@ function setVoiceInput() {
           document.getElementById("score").textContent = correctCount;
         }
       } else {
+        consecutiveWins = 0;
         playAudio("incorrect", 0.3);
         reply.textContent = "❌ " + replyText;
         replyPlease.classList.add("d-none");
@@ -328,6 +338,7 @@ function countdown() {
     } else {
       clearTimeout(timer);
       correctCount = 0;
+      consecutiveWins = 0;
       countPanel.classList.add("d-none");
       infoPanel.classList.remove("d-none");
       playPanel.classList.remove("d-none");
@@ -366,7 +377,8 @@ function initTime() {
 function scoring() {
   playPanel.classList.add("d-none");
   scorePanel.classList.remove("d-none");
-  document.getElementById("score").textContent = correctCount;
+  document.getElementById("score").textContent =
+    `${correctCount} / ${totalCount}`;
 }
 
 await initProblems();
@@ -376,6 +388,7 @@ document.getElementById("toggleDarkMode").onclick = toggleDarkMode;
 document.getElementById("addFurigana").onclick = addFurigana;
 document.getElementById("restartButton").onclick = startGame;
 document.getElementById("startButton").onclick = startGame;
+document.getElementById("skipButton").onclick = skipProblem;
 document.getElementById("startVoiceInput").onclick = startVoiceInput;
 document.getElementById("stopVoiceInput").onclick = stopVoiceInput;
 document.getElementById("respeak").onclick = respeak;
