@@ -1,4 +1,4 @@
-const cacheName = "2025-11-29 00:00";
+const cacheName = "2026-01-14 00:00";
 const urlsToCache = [
   "/talk-phonics/index.js",
   "/talk-phonics/index.yomi",
@@ -6,7 +6,6 @@ const urlsToCache = [
   "/talk-phonics/mp3/incorrect1.mp3",
   "/talk-phonics/mp3/correct3.mp3",
   "/talk-phonics/favicon/favicon.svg",
-  "https://marmooo.github.io/yomico/yomico.min.js",
 ];
 
 async function preCache() {
